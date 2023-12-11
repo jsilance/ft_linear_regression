@@ -39,8 +39,8 @@ with open('data.csv', 'r') as file:
 	data = list(reader)
 	data = [(float(el[0]), float(el[1])) for el in data]
 	theta = [0, 0]
-	learning_rate = 0.00001
-	for _ in range(500):
+	learning_rate = 0.01
+	for _ in range(5):
 		theta = update_theta(theta, data, learning_rate)
 	print("Theta B: ", theta[0])
 	print("Theta A: ", theta[1])
