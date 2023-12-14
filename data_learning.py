@@ -31,14 +31,15 @@ def descent_grad(theta, data):
 	J = (1 / (2 * m)) * J
 	return J
 
-with open('generated_data.csv', 'r') as file:
+# with open('generated_data.csv', 'r') as file:
+with open('data.csv', 'r') as file:
 	reader = csv.reader(file)
 	next(reader)
 	data = list(reader)
 	data = [(float(el[0]), float(el[1])) for el in data]
 	theta = [0, 0]
-	learning_rate = 0.50
-	num_iterations = 240000
+	learning_rate = 0.05
+	num_iterations = 2400000
 	cost = 1
 	for _ in range(num_iterations):
 		old_cost = cost
