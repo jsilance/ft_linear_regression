@@ -1,6 +1,8 @@
 import matplotlib.pyplot as plt
 import csv
 
+# ------ Gradient descent ---------------
+
 def estimate_price(mileage, theta):
 	return theta[0] + theta[1] * mileage
 
@@ -35,7 +37,7 @@ def descent_grad(theta, data):
 		J += (estimate_price(x, theta) - y) ** 2
 	J = (1 / (2 * m)) * J
 	return J
-
+# ---------------------------------------
 
 # ------ Graphic functions --------------
 
@@ -62,6 +64,15 @@ def drawlines_plt(data, theta):
 	plt.draw()
 # ---------------------------------------
 
+# ------ Write to file ------------------
+
+def writeOutputData(theta, corelation):
+	with open("learned_data.csv", 'w') as file:
+		writer = csv.writer(file)
+		writer.writerow(['theta0', 'theta1', 'corelation'])
+		writer.writerow([theta[0], theta[1], corelation])
+# ---------------------------------------
+
 data = list()
 
 with open('data.csv', 'r') as file:
@@ -72,13 +83,14 @@ with open('data.csv', 'r') as file:
 
 theta = [0, 0]
 cost = 1
+# ---------------------------------------
 
 # ------ Options d'apprentissage --------
 
-graphic_mode = 2 # 0 no graphic, 1 basic graphic (slow), 2 graphich with history (very slow)
-learning_rate = 0.7
+graphic_mode = 1 # 0 no graphic, 1 basic graphic (slow), 2 graphich with history (very slow)
+learning_rate = 0.6
 num_iterations = 2000000000
-precision = 0.00000000000000000001
+stabilisation = 1.0 * 10 ** -10
 # ---------------------------------------
 
 if (graphic_mode >= 1):
@@ -96,11 +108,11 @@ for _ in range(num_iterations):
 		point_init_plt(data, theta)
 	if (graphic_mode >= 1):
 		drawlines_plt(data, theta)
-		plt.pause(0.05)
-	# print(abs(cost / old_cost) - 1)
+		plt.pause(0.1)
+	# print(str(100 - abs(100 - abs(cost / old_cost) * 100)))
 	# -----------------------------------
 
-	if (abs(abs(cost / old_cost) - 1) < precision):
+	if (abs(abs(cost / old_cost) - 1) < stabilisation):
 		break
 # ---------------------------------------
 
@@ -108,5 +120,7 @@ if (graphic_mode >= 1):
 	plt.ioff()
 	# plt.show()
 
-print("Learning complete with: " + str(100 - abs(100 - abs(cost / old_cost) * 100)) + "% of precision.")
+print("Learning complete with: " + str(100 - abs(100 - abs(cost / old_cost) * 100)) + "% of stabilisation.")
 print("Ready to estimate the price.")
+
+writeOutputData(theta, 0)
