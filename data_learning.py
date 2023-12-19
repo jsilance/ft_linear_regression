@@ -163,7 +163,10 @@ coefCore = coefCorelation(data)
 
 if (old_cost):
 	print("Learning complete with: " + str(100 - abs(100 - abs(cost / old_cost) * 100)) + "% of stabilisation.")
-print("Corelation coeficient: ", coefCore)
+if (coefCore == -2):
+	print("Constant detected!")
+else:
+	print("Corelation coeficient: ", coefCore)
 
 print("\nReady to estimate the price.")
 
