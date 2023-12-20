@@ -53,10 +53,10 @@ double descent_grad(t_theta *theta, t_data *datas)
 
 	data = datas;
 	j = 0;
-	elems = ft_lst_size(data);
+	elems = ft_lstsize(data);
 	while (data)
 	{
-		j += pow((estimate_prive(data->km, theta) - data->price), 2);
+		j += pow((estimate_prive(data->km, theta) - data->price), 2.0);
 		data = data->next;
 	}
 	j = ((double)1.0 / ((double)2.0 * elems)) * j;

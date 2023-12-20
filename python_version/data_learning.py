@@ -113,10 +113,11 @@ def writeOutputData(theta, corelation):
 
 # ------ Options d'apprentissage --------
 
-graphic_mode = 1 # 0 no graphic, 1 basic graphic (slow), 2 graphich with history (very slow)
-learning_rate = 1.0
-num_iterations = 20000000
-stabilisation = 1.0 * 10 ** -15
+graphic_mode = 0 # 0 no graphic, 1 basic graphic (slow), 2 graphich with history (very slow)
+learning_rate = 0.1
+num_iterations = 2000000000
+# stabilisation = 1.0 * 10 ** -15
+stabilisation = 0.00000000000001
 # ---------------------------------------
 
 data = list()

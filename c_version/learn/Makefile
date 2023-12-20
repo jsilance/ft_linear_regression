@@ -5,6 +5,7 @@ NAME		= learn
 # ============================================================================= #
 
 SRCS		= main.c utils.c descent_gradient.c \
+			  get_next_line.c get_next_line_utils.c \
 
 # ============================================================================= #
 
@@ -12,13 +13,13 @@ BASE_SRC	= $(addprefix srcs/, $(SRCS))
 
 # ============================================================================= #
 
-BASE_OBJS	= $(BASE_SRC:.cpp=.o)
+BASE_OBJS	= $(BASE_SRC:.c=.o)
 
 ALL_OBJS	= $(BASE_OBJS)
 
 # ============================================================================= #
 
-LDFLAGS		= 
+LDFLAGS		= -lm
 
 # ============================================================================= #
 
@@ -29,7 +30,7 @@ CFLAGS		= -Wall -Wextra -Werror
 RM			= rm -f
 
 .c.o:
-	$(CC) $(CFLAGS) -c $< -o ${<:.cpp=.o}
+	$(CC) $(CFLAGS) -c $< -o ${<:.c=.o}
 
 $(NAME):	$(ALL_OBJS)
 	$(CC) $(CFLAGS) $(ALL_OBJS) $(LDFLAGS) -o $(NAME)

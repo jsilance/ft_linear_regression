@@ -6,6 +6,8 @@
 # include <string.h>
 # include <fcntl.h>
 # include <math.h>
+# include <unistd.h>
+# include "get_next_line.h"
 
 enum e_errors
 {
@@ -32,6 +34,8 @@ int		create_output_file(char *name);
 int		open_input_file(char *name);
 int		ft_lstsize(t_data *data);
 void	ft_lstclear(t_data *data);
+void	ft_lstadd_back(t_data **data, t_data *new);
+t_data	*init_data(int fd);
 
 double	estimate_prive(double mileage, t_theta *theta);
 double	sum_estimate_a(t_data *datas, t_theta *theta);
