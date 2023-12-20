@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import sys
 import math
 import csv
 
@@ -110,64 +111,76 @@ def writeOutputData(theta, corelation):
 		writer.writerow([theta[0], theta[1], corelation])
 # ---------------------------------------
 
-data = list()
-
-with open('data.csv', 'r') as file:
-	reader = csv.reader(file)
-	next(reader)
-	data = list(reader)
-	data = [(float(el[0]), float(el[1])) for el in data]
-
-theta = [0, 0]
-cost = 1
-# ---------------------------------------
-
 # ------ Options d'apprentissage --------
 
-graphic_mode = 0 # 0 no graphic, 1 basic graphic (slow), 2 graphich with history (very slow)
+graphic_mode = 1 # 0 no graphic, 1 basic graphic (slow), 2 graphich with history (very slow)
 learning_rate = 1.0
-num_iterations = 2000000000
-stabilisation = 1.0 * 10 ** -50
+num_iterations = 20000000
+stabilisation = 1.0 * 10 ** -15
 # ---------------------------------------
 
-if (graphic_mode >= 1):
-	plt.ion()
-	point_init_plt(data, [0, 0])
+data = list()
 
-# ------ Iteration epoch ----------------
-for _ in range(num_iterations):
-	old_cost = cost
-	theta = update_theta(theta, data, learning_rate)
-	cost = descent_grad(theta, data)
-	
-	# ------ graphic part ---------------
-	if (graphic_mode == 1):
-		point_init_plt(data, theta)
+def main():
+	if len(sys.argv) != 2:
+		print("Usage: python3 {} <output csv_file>".format(sys.argv[0]))
+		exit(1)
+	try:
+		with open(sys.argv[1], 'r') as file:
+			reader = csv.reader(file)
+			next(reader)
+			data = list(reader)
+			data = [(float(el[0]), float(el[1])) for el in data]
+	except Exception as e:
+		print("Error:", e)
+		exit(1)
+
+	theta = [0, 0]
+	cost = 1
+	# ---------------------------------------
+
 	if (graphic_mode >= 1):
-		drawlines_plt(data, theta)
-		plt.pause(0.1)
-	# print(str(100 - abs(100 - abs(cost / old_cost) * 100)))
-	# -----------------------------------
+		plt.ion()
+		point_init_plt(data, [0, 0])
 
-	if (old_cost == 0):
-		break
-	if (abs(abs(cost / old_cost) - 1) < stabilisation):
-		break
-# ---------------------------------------
+	# ------ Iteration epoch ----------------
+	for _ in range(num_iterations):
+		old_cost = cost
+		theta = update_theta(theta, data, learning_rate)
+		cost = descent_grad(theta, data)
+		
+		# ------ graphic part ---------------
+		if (graphic_mode == 1):
+			point_init_plt(data, theta)
+		if (graphic_mode >= 1):
+			drawlines_plt(data, theta)
+			plt.pause(0.1)
+		# -----------------------------------
 
-if (graphic_mode >= 1):
-	plt.ioff()
-	# plt.show()
+		if (old_cost == 0):
+			break
+		if (abs(abs(cost / old_cost) - 1) < stabilisation):
+			break
+	# ---------------------------------------
 
-coefCore = coefCorelation(data)
+	if (graphic_mode >= 1):
+		plt.ioff()
+		print("Learning complete.")
+		plt.show()
 
-if (old_cost):
-	print("Learning complete with: " + str(100 - abs(100 - abs(cost / old_cost) * 100)) + "% of stabilisation.")
-if (coefCore == -2):
-	print("Constant detected!")
-else:
-	print("Corelation coeficient: ", coefCore)
+	coefCore = coefCorelation(data)
 
-print("\nReady to estimate the price.")
+	if (old_cost):
+		print("Learning complete with: " + str(100 - abs(100 - abs(cost / old_cost) * 100)) + "% of stabilisation.")
+	if (coefCore == -2):
+		print("Constant detected!")
+	else:
+		print("Corelation coeficient: ", coefCore)
 
-writeOutputData(theta, coefCore)
+	print("\nReady to estimate the price.")
+
+
+	writeOutputData(theta, coefCore)
+
+if __name__ == "__main__":
+	main()
